@@ -1,21 +1,7 @@
 import pygame
 import sys
 from random import randint
-
-from muselsl import stream, list_muses
-import numpy as np  # Module that simplifies computations on matrices
-import matplotlib.pyplot as plt  # Module used for plotting
-from pylsl import StreamInlet, resolve_byprop
-from setuptools import setup  # Module to receive EEG data
-import utils  # Our own utility functions
-
-
-# Handy little enum to make code more readable
-class Band:
-    Delta = 0
-    Theta = 1
-    Alpha = 2
-    Beta = 3
+import eeg_boiler
 
 
 def display_score():
@@ -92,6 +78,9 @@ obstacle_rect_list = []
 obstacle_timer = pygame.USEREVENT + 1
 pygame.time.set_timer(obstacle_timer, 1200)
 
+# set up eeg before pygame while loop
+inlet, fs, SHIFT_LENGTH, INDEX_CHANNEL, EPOCH_LENGTH, BUFFER_LENGTH, OVERLAP_LENGTH, eeg_buffer, filter_state, band_buffer = eeg_boiler.setup_eeg()
+
 
 # game loop
 while True:
@@ -109,8 +98,10 @@ while True:
         # if event.type == pygame.KEYDOWN:
         #     if event.key == pygame.K_SPACE and player1_rect.bottom >= ground_height:
         #         player1_grav = -25
+    
+    # call jump boolean func
+    jump_boolean = eeg_boiler.run_eeg(inlet, fs, SHIFT_LENGTH, INDEX_CHANNEL, EPOCH_LENGTH, BUFFER_LENGTH, OVERLAP_LENGTH, eeg_buffer, filter_state, band_buffer)
 
-               
     keys = pygame.key.get_pressed()
     if jump_boolean and player1_rect.bottom >= ground_height:
         jump1 = True

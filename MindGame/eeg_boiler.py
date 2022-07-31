@@ -1,23 +1,11 @@
-# -*- coding: utf-8 -*-
-"""
-Estimate Relaxation from Band Powers
-
-This example shows how to buffer, epoch, and transform EEG data from a single
-electrode into values for each of the classic frequencies (e.g. alpha, beta, theta)
-Furthermore, it shows how ratios of the band powers can be used to estimate
-mental state for neurofeedback.
-
-The neurofeedback protocols described here are inspired by
-*Neurofeedback: A Comprehensive Review on System Design, Methodology and Clinical Applications* by Marzbani et. al
-
-Adapted from https://github.com/NeuroTechX/bci-workshop
-"""
-
+from muselsl import stream, list_muses
 import numpy as np  # Module that simplifies computations on matrices
 import matplotlib.pyplot as plt  # Module used for plotting
 from pylsl import StreamInlet, resolve_byprop
 from setuptools import setup  # Module to receive EEG data
 import utils  # Our own utility functions
+from playsound import playsound
+import os
 
 # Handy little enum to make code more readable
 class Band:
@@ -26,6 +14,7 @@ class Band:
     Alpha = 2
     Beta = 3
 
+# looks for Muse device and creates connection
 def setup_eeg():
     """ EXPERIMENTAL PARAMETERS """
     # Modify these to change aspects of the signal processing
@@ -45,7 +34,7 @@ def setup_eeg():
 
     # Index of the channel(s) (electrodes) to be used
     # 0 = left ear, 1 = left forehead, 2 = right forehead, 3 = right ear
-    INDEX_CHANNEL = [1]
+    INDEX_CHANNEL = [0]
 
     # if __name__ == "__main__":
 
@@ -95,7 +84,7 @@ def setup_eeg():
 
     return inlet, fs, SHIFT_LENGTH, INDEX_CHANNEL, EPOCH_LENGTH, BUFFER_LENGTH, OVERLAP_LENGTH, eeg_buffer, filter_state, band_buffer
 
-
+# returns jump_boolean that can be continuously called in while loop
 def run_eeg(inlet, fs, SHIFT_LENGTH, INDEX_CHANNEL, EPOCH_LENGTH, BUFFER_LENGTH, OVERLAP_LENGTH, eeg_buffer, filter_state, band_buffer):
 
     try:
@@ -135,8 +124,8 @@ def run_eeg(inlet, fs, SHIFT_LENGTH, INDEX_CHANNEL, EPOCH_LENGTH, BUFFER_LENGTH,
             smooth_band_powers = np.mean(band_buffer, axis=0)
 
             # convert band power float to integer for terminal graph
-            new_array = np.multiply(band_powers,10)
-            band_power_int = new_array.astype(np.int)
+            # new_array = np.multiply(band_powers,10)
+            # band_power_int = new_array.astype(np.int)
             
             # print method with numbers
             # print('Delta: ', np.format_float_positional(band_powers[Band.Delta],precision=3),'|',band_power_int[Band.Delta]*"░")
@@ -145,7 +134,7 @@ def run_eeg(inlet, fs, SHIFT_LENGTH, INDEX_CHANNEL, EPOCH_LENGTH, BUFFER_LENGTH,
             # print('Beta: ', np.format_float_positional(band_powers[Band.Beta],precision=3),"|",band_power_int[Band.Theta]*"░")
             # print("----------------------")
 
-            delta_band_str = band_power_int[Band.Delta]*"░"
+            # delta_band_str = band_power_int[Band.Delta]*"░"
             # theta_band_str = band_power_int[Band.Theta]*"░"
             # alpha_band_str = band_power_int[Band.Alpha]*"░"
             # beta_band_str = band_power_int[Band.Beta]*"░"
@@ -160,14 +149,30 @@ def run_eeg(inlet, fs, SHIFT_LENGTH, INDEX_CHANNEL, EPOCH_LENGTH, BUFFER_LENGTH,
             # print('Beta : ',len(beta_band_str)," ",beta_band_str)
             # print('\n')
 
+            # jump_boolean = False
+
+            # if(len(delta_band_str)>5):
+            #     jump_boolean = True
+            #     # print("Jump: True")
+            
+            # print(jump_boolean)
+
+
+            # print("--------------")
+            # print(ch_data)
+            # print("--------------")
+            max_val = np.min(ch_data)
+            
             jump_boolean = False
 
-            if(len(delta_band_str)>5):
+            if max_val < -250:
                 jump_boolean = True
-                # print("Jump: True")
-            
-            print(jump_boolean)
 
+            # for debugging
+            # print(max_val)
+            
+            return jump_boolean
+        
 
             """ 3.3 COMPUTE NEUROFEEDBACK METRICS """
             # These metrics could also be used to drive brain-computer interfaces
@@ -195,5 +200,14 @@ def run_eeg(inlet, fs, SHIFT_LENGTH, INDEX_CHANNEL, EPOCH_LENGTH, BUFFER_LENGTH,
     except KeyboardInterrupt:
         print('Closing!')
 
-# inlet, fs, SHIFT_LENGTH, INDEX_CHANNEL, EPOCH_LENGTH, BUFFER_LENGTH, OVERLAP_LENGTH, eeg_buffer, filter_state, band_buffer = setup_eeg()
-# run_eeg(inlet, fs, SHIFT_LENGTH, INDEX_CHANNEL, EPOCH_LENGTH, BUFFER_LENGTH, OVERLAP_LENGTH, eeg_buffer, filter_state, band_buffer)
+
+
+
+### BOILER PLATE CODE BELOW: COPY INTO YOUR PROGRAM AND IMPLEMENT AS YOU WISH
+
+# # ---------- sets up eeg before pygame while loop ------------
+# inlet, fs, SHIFT_LENGTH, INDEX_CHANNEL, EPOCH_LENGTH, BUFFER_LENGTH, OVERLAP_LENGTH, eeg_buffer, filter_state, band_buffer = eeg_boiler.setup_eeg()
+
+# # ---------- call jump_boolean func -------------------
+# jump_boolean = eeg_boiler.run_eeg(inlet, fs, SHIFT_LENGTH, INDEX_CHANNEL, EPOCH_LENGTH, BUFFER_LENGTH, OVERLAP_LENGTH, eeg_buffer, filter_state, band_buffer)
+
