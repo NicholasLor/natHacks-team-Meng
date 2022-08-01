@@ -2,7 +2,7 @@ import pygame
 import sys
 from random import randint
 import eeg_boiler
-
+import datetime
 
 def display_score():
     current_time = int((pygame.time.get_ticks() - start_time)/100)
@@ -79,11 +79,14 @@ obstacle_timer = pygame.USEREVENT + 1
 pygame.time.set_timer(obstacle_timer, 1200)
 
 # set up eeg before pygame while loop
-inlet, fs, SHIFT_LENGTH, INDEX_CHANNEL, EPOCH_LENGTH, BUFFER_LENGTH, OVERLAP_LENGTH, eeg_buffer, filter_state, band_buffer = eeg_boiler.setup_eeg()
+inlet, fs, SHIFT_LENGTH, INDEX_CHANNEL, EPOCH_LENGTH, BUFFER_LENGTH, OVERLAP_LENGTH, eeg_buffer, filter_state = eeg_boiler.setup_eeg()
 
 
 # game loop
 while True:
+    now = datetime.datetime.now()
+    print(now)
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
@@ -100,7 +103,7 @@ while True:
         #         player1_grav = -25
     
     # call jump boolean func
-    jump_boolean = eeg_boiler.run_eeg(inlet, fs, SHIFT_LENGTH, INDEX_CHANNEL, EPOCH_LENGTH, BUFFER_LENGTH, OVERLAP_LENGTH, eeg_buffer, filter_state, band_buffer)
+    jump_boolean = eeg_boiler.run_eeg(inlet, fs, SHIFT_LENGTH, INDEX_CHANNEL, EPOCH_LENGTH, BUFFER_LENGTH, OVERLAP_LENGTH, eeg_buffer, filter_state )
 
     keys = pygame.key.get_pressed()
     if jump_boolean and player1_rect.bottom >= ground_height:
