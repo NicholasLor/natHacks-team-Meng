@@ -2,16 +2,20 @@
 
 ### Introduction ###
 Welcome to Mind Games, a free game you can play with your own Muse 2 or Muse 2 brain wave sensing device developed from the natHacks 2022 Hackathon. 
+
 Mind Games is a simple platform jumping game- except instead of a standard keyboard input, you play with a brain sensing headband- just blink in order to trigger the character’s jump action!
+
 natHacks is an annual hackathon hosted by the NeurAlbertaTech, an organization started by University of Alberta students to promote interest in neurotech by hosting hackathons, seminars, and networking events.
 All of this code was developed from our team members: Nick Lor, Ken Weech, Shawn Lee, Tania So, and Ed Hale during the event weekend, July 29th, 2022 to August 31st, 2022.
 
 ### Why a Game? ###
 Brain-Computer Interfaces (BCIs) are a direct pathway between your brain’s waves and a computer- with the intent of achieving some sort of action or collecting data.  They have shown potential in a variety of use cases- they can help disabled people communicate or control artificial limbs, detect your mood and help you meditate, and control simple video games. 
+
 As fairly new beginners to programming and complete beginners to the neurotech domain, we wanted to dip our feet in the pond with a reasonable use case- a simple game. Additionally, there have been BCI games released in the past designed for disabled people as a form of entertainment.
 
 ### Development Process ###
 We first prepared for the hackathon by learning a bit about neuroscience fundamentals through natHacks’ provided workshops and seminars. During the hackathon, we first worked to stream our Muse hardware headsets to a python program to grab some initial data using the MuseLSL python streaming package. The Muse 2 and Muse S headsets have four sensors each on them that detect Electroencephalogram (EEG) data. 
+
 After an initial look at some sample brain wave data, we concluded the blink event would be the easiest method to trigger a jump action as beginners. We then developed the game using PyGame and interlinked the jump action.
 
 ### Result ###
