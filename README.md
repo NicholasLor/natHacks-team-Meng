@@ -1,4 +1,5 @@
 # :brain: :video_game: Mind Games: natHacks-team-Meng :video_game: :brain:
+![MindGames](HeaderImage.png)
 
 ### Introduction ###
 Welcome to Mind Games, a free game you can play with your own Muse 2 or Muse 2 brain wave sensing device developed from the natHacks 2022 Hackathon. 
@@ -19,6 +20,7 @@ We first prepared for the hackathon by learning a bit about neuroscience fundame
 After an initial look at some sample brain wave data, we concluded the blink event would be the easiest method to trigger a jump action as beginners. We then developed the game using PyGame and interlinked the jump action.
 
 ### Result ###
+![MindGames](Demo.png)
 We intended to make a 2 player game, but only had time to get one character working with the headset. Regardless, it was a fantastic experience that exposed us to the infinite possibilities in the neurotech world and was a great chance to improve our Python programming!
 
 ### Technical Overview ###
